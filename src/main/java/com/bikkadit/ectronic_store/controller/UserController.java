@@ -4,6 +4,8 @@ import com.bikkadit.ectronic_store.constant.AppConstant;
 import com.bikkadit.ectronic_store.dto.UserDto;
 import com.bikkadit.ectronic_store.helper.ApiResponse;
 import com.bikkadit.ectronic_store.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,61 +17,117 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
+
+    public static Logger logger = LoggerFactory.getLogger(UserController.class);
+
+
     @Autowired
     private UserService userService;
 
 
-
-    // CREATING USER
+    /**
+     * @param userDto
+     * @return
+     * @auther Suraj
+     * @apiNote Create User
+     */
     @PostMapping("/")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+        logger.info("Initiating request for create User ");
         UserDto userCreated = userService.createUser(userDto);
+        logger.info("completed request for save user data ");
         return new ResponseEntity<>(userCreated, HttpStatus.CREATED);
     }
 
+
+    /**
+     * @param userId
+     * @param userDto
+     * @return
+     * @auther suraj
+     * @apiNote Update user data
+     */
     @PostMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable String userId,@RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> updateUser(@PathVariable String userId, @RequestBody UserDto userDto) {
 
+        logger.info("initiating request for update user : " + userId);
         UserDto userDto1 = userService.updateUser(userDto, userId);
-        return new ResponseEntity<>(userDto1,HttpStatus.CREATED);
+        logger.info("request completed for update user :" + userId);
+        return new ResponseEntity<>(userDto1, HttpStatus.CREATED);
     }
 
+
+    /**
+     * @param userId
+     * @return message
+     * @apiNote Delete user
+     */
     @DeleteMapping("/{userId}")
-    public ResponseEntity<ApiResponse> deleteUser(@PathVariable String userId){
+    public ResponseEntity<ApiResponse> deleteUser(@PathVariable String userId) {
+        logger.info("Initiating request for delete user " + userId);
         userService.deleteUser(userId);
-
         ApiResponse message = ApiResponse.builder().message(AppConstant.USER_DELETE).success(true).status(HttpStatus.OK).build();
-
-
-        return new ResponseEntity<>(message,HttpStatus.OK);
+        logger.info("request complete for delete user " + userId);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
 
+    /**
+     * @return
+     * @auther suraj
+     * @apiNote Get all users
+     */
     @GetMapping("/allUsers")
-    public ResponseEntity<List<UserDto>> getAllUser(){
-
+    public ResponseEntity<List<UserDto>> getAllUser() {
+        logger.info("initiating request for getting all users");
         List<UserDto> allUsers = userService.getAllUsers();
-        return new ResponseEntity<>(allUsers,HttpStatus.OK);
+        logger.info("request complete for getting all users");
+        return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
 
+    /**
+     * @param userId
+     * @apiNote getting single user
+     * @return
+     */
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> singleUser(@PathVariable String userId){
+    public ResponseEntity<UserDto> singleUser(@PathVariable String userId) {
 
-        return new ResponseEntity<>(userService.getUserById(userId),HttpStatus.OK);
+        logger.info("initiating request for getting single user using userId "+userId);
+        UserDto userById = userService.getUserById(userId);
+        logger.info("request complete for getting user using userId");
+        return new ResponseEntity<>(userById, HttpStatus.OK);
     }
 
 
+    /**
+     *
+     * @param email
+     * @apiNote getting user by email
+     * @return
+     */
     @GetMapping("/email/{email}")
-    public ResponseEntity<UserDto> getByEmail(@PathVariable String email){
-        return new ResponseEntity<>(userService.getUserByEmail(email),HttpStatus.OK);
+    public ResponseEntity<UserDto> getByEmail(@PathVariable String email) {
+        logger.info("initiating request for getting user by using email "+ email);
+        UserDto userByEmail = userService.getUserByEmail(email);
+        logger.info("request complete for getting user by using email ");
+        return new ResponseEntity<>(userByEmail, HttpStatus.OK);
     }
 
+    /**
+     *
+     * @param keyword
+     * @apiNote search user using keyword
+     * @return
+     */
     @GetMapping("/search/{keyword}")
-    public ResponseEntity<List<UserDto>> searchByKeyword(@PathVariable String keyword){
+    public ResponseEntity<List<UserDto>> searchByKeyword(@PathVariable String keyword) {
 
+        logger.info("initiating request for search user using keyword " +keyword);
         List<UserDto> dtoList = userService.searchUser(keyword);
-        return new ResponseEntity<>(dtoList,HttpStatus.OK);
+        logger.info("request complete for search user using keyword ");
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
 }
