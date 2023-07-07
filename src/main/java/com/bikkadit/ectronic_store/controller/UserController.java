@@ -26,9 +26,9 @@ public class UserController {
 
 
     /**
+     * @auther Suraj
      * @param userDto
      * @return
-     * @auther Suraj
      * @apiNote Create User
      */
     @PostMapping("/")
@@ -41,10 +41,10 @@ public class UserController {
 
 
     /**
+     * @auther suraj
      * @param userId
      * @param userDto
      * @return
-     * @auther suraj
      * @apiNote Update user data
      */
     @PostMapping("/{userId}")
@@ -96,7 +96,7 @@ public class UserController {
 
         logger.info("initiating request for getting single user using userId "+userId);
         UserDto userById = userService.getUserById(userId);
-        logger.info("request complete for getting user using userId");
+        logger.info("request complete for getting user using userId "+userId);
         return new ResponseEntity<>(userById, HttpStatus.OK);
     }
 
@@ -111,7 +111,7 @@ public class UserController {
     public ResponseEntity<UserDto> getByEmail(@PathVariable String email) {
         logger.info("initiating request for getting user by using email "+ email);
         UserDto userByEmail = userService.getUserByEmail(email);
-        logger.info("request complete for getting user by using email ");
+        logger.info("request complete for getting user by using email " +email);
         return new ResponseEntity<>(userByEmail, HttpStatus.OK);
     }
 
@@ -126,7 +126,7 @@ public class UserController {
 
         logger.info("initiating request for search user using keyword " +keyword);
         List<UserDto> dtoList = userService.searchUser(keyword);
-        logger.info("request complete for search user using keyword ");
+        logger.info("request complete for search user using keyword "+keyword);
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 

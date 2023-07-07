@@ -6,6 +6,8 @@ import com.bikkadit.ectronic_store.entity.User;
 import com.bikkadit.ectronic_store.repository.UserRepository;
 import com.bikkadit.ectronic_store.service.UserService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,18 +17,26 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserImplementation implements UserService {
-
+    public static Logger logger= LoggerFactory.getLogger(UserImplementation.class);
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private ModelMapper modelMapper;
 
+    /**
+     * @auther Suraj
+     * @param userDto
+     * @apiNote Create User
+     * @return
+     */
     @Override
     public UserDto createUser(UserDto userDto) {
-
-        //to generate unique id in String Format
+        /**
+         * @apiNote logic for generate unique id in String Format
+         */
+        logger.info("Initiating request for generate unique id in String format ");
         String userId = UUID.randomUUID().toString();
+        logger.info("Request complete for generating unique id in String format ");
         userDto.setUserId(userId);
 
         //Dto To Entity
@@ -82,8 +92,7 @@ public class UserImplementation implements UserService {
     }
 
     @Override
-    public UserDto getUserByEmail(String email)
-    {
+    public UserDto getUserByEmail(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
 
         return entityToDto(user);
@@ -112,7 +121,7 @@ public class UserImplementation implements UserService {
                 .build();
 */
 
-        return this.modelMapper.map(userDto,User.class);
+        return this.modelMapper.map(userDto, User.class);
     }
 
     private UserDto entityToDto(User saveUser) {
@@ -127,7 +136,7 @@ public class UserImplementation implements UserService {
                 .imageName(saveUser.getImageName())
                 .build();
 */
-        return this.modelMapper.map(saveUser,UserDto.class);
+        return this.modelMapper.map(saveUser, UserDto.class);
     }
 }
 
