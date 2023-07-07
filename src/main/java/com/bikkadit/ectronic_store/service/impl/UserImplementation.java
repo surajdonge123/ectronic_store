@@ -127,22 +127,34 @@ public class UserImplementation implements UserService {
      */
     @Override
     public UserDto getUserByEmail(String email) {
-        logger.info("Sending Request to userRepository for geting user by Email {} "+email);
+        logger.info("Sending Request to userRepository for getting user by Email {} "+email);
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
-        logger.info("");
+        logger.info("request complete for getting user by Email {} "+email);
         return entityToDto(user);
     }
 
+    /**
+     * @auther suraj
+     * @param keyword
+     * @return
+     * @apiNote getting user details by keyword
+     */
     @Override
     public List<UserDto> searchUser(String keyword) {
-
-
+        logger.info("Sending Request to userRepository for getting user details using keyword {}"+keyword);
         List<User> userList = userRepository.findByNameContaining(keyword);
+        logger.info("request complete for getting details user using keyword");
         List<UserDto> dtolist = userList.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
 
         return dtolist;
     }
 
+    /**
+     *
+     * @param userDto
+     * @return
+     * @apiNote Converting DTO to ENTITY class
+     */
     private User dtoToEntity(UserDto userDto) {
 
        /* User user = User.builder()
@@ -159,6 +171,12 @@ public class UserImplementation implements UserService {
         return this.modelMapper.map(userDto, User.class);
     }
 
+    /**
+     *
+     * @param saveUser
+     * @return
+     * @apiNote converting Entity class to Dto
+     */
     private UserDto entityToDto(User saveUser) {
 
         /*UserDto userDto = UserDto.builder()
