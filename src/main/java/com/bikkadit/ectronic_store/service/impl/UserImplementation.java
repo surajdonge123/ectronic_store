@@ -26,7 +26,7 @@ public class UserImplementation implements UserService {
     /**
      * @auther Suraj
      * @param userDto
-     * @apiNote Create User
+     * @apiNote Logic for Create User
      * @return
      */
     @Override
@@ -41,8 +41,9 @@ public class UserImplementation implements UserService {
 
         //Dto To Entity
         User user = dtoToEntity(userDto);
+        logger.info("Sending request to userRepository for Creating user in database ");
         User saveUser = this.userRepository.save(user);
-
+        logger.info("request Complete for the creating user in database");
         //Entity To Dto
         UserDto newDto = entityToDto(saveUser);
 
@@ -50,9 +51,17 @@ public class UserImplementation implements UserService {
     }
 
 
+    /**
+     * @auther suraj
+     * @param userDto
+     * @param userId
+     * @apiNote update user
+     * @return
+     */
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
 
+        logger.info("Sending request to UserRepository for update user data of {} "+userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
 
         user.setName(userDto.getName());
@@ -60,41 +69,67 @@ public class UserImplementation implements UserService {
         user.setGender(userDto.getGender());
         user.setPassword(userDto.getPassword());
         user.setImageName(userDto.getImageName());
-
         User updatedUser = userRepository.save(user);
+        logger.info("Request complete for update user data of {}"+userId);
         UserDto userDto1 = entityToDto(updatedUser);
         return userDto1;
     }
 
+    /**
+     * @apiNote Delete user
+     * @param userId
+     */
     @Override
     public void deleteUser(String userId) {
 
+        logger.info("Sending request to userRepository for delete user data of {}"+userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
         userRepository.delete(user);
+        logger.info("Request complete for delete user data from of {}"+userId);
     }
 
+
+    /**
+     * @auther Suraj
+     * @return
+     * @apiNote get all users
+     */
     @Override
     public List<UserDto> getAllUsers() {
 
+        logger.info("Sending Request to UserRepository for getting all the users ");
         List<User> users = userRepository.findAll();
         List<UserDto> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
-
+        logger.info("Request complete for getting all data");
         return dtoList;
     }
 
+    /**
+     * @auther Suraj
+     * @param userId
+     * @return
+     * @apiNote get user by userId
+     */
     @Override
     public UserDto getUserById(String userId) {
 
+        logger.info("Sending request to userRepository for getting single user of {}"+userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
-
-
+        logger.info("request complete for getting single user of {}"+userId);
         return entityToDto(user);
     }
 
+    /**
+     * @auther suraj
+     * @param email
+     * @apiNote get user by email
+     * @return
+     */
     @Override
     public UserDto getUserByEmail(String email) {
+        logger.info("Sending Request to userRepository for geting user by Email {} "+email);
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
-
+        logger.info("");
         return entityToDto(user);
     }
 
@@ -133,7 +168,7 @@ public class UserImplementation implements UserService {
                 .password(saveUser.getPassword())
                 .about(saveUser.getAbout())
                 .gender(saveUser.getGender())
-                .imageName(saveUser.getImageName())
+                .imageName(saveUser.getImageName())5555
                 .build();
 */
         return this.modelMapper.map(saveUser, UserDto.class);
