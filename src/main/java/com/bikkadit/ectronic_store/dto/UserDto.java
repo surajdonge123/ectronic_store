@@ -29,11 +29,11 @@ public class UserDto {
     private String gender;
 
     @NotBlank
-    @Size(min = 10,max = 255,message = "Invalid details !! describe more about yourself")
+    @Size(min = 10,max = 255,message = "Invalid details !! Describe more about yourself")
     private String about;
 
     @NotBlank
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)[a-zA-Z\\\\d]{8,}$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)[a-zA-Z\\\\d]{8,}$",message = "Invalid details !!.Password must contains minimum one Capital one Small letter and one Number ")
     private String password;
 
 
