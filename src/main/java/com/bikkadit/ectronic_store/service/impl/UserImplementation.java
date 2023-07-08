@@ -3,6 +3,7 @@ package com.bikkadit.ectronic_store.service.impl;
 import com.bikkadit.ectronic_store.constant.AppConstant;
 import com.bikkadit.ectronic_store.dto.UserDto;
 import com.bikkadit.ectronic_store.entity.User;
+import com.bikkadit.ectronic_store.exception.ResourceNotFoundException;
 import com.bikkadit.ectronic_store.repository.UserRepository;
 import com.bikkadit.ectronic_store.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -10,11 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 @Service
 public class UserImplementation implements UserService {
     public static Logger logger= LoggerFactory.getLogger(UserImplementation.class);
@@ -62,7 +61,7 @@ public class UserImplementation implements UserService {
     public UserDto updateUser(UserDto userDto, String userId) {
 
         logger.info("Sending request to UserRepository for update user data of {} "+userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
 
         user.setName(userDto.getName());
         user.setAbout(userDto.getAbout());
@@ -83,7 +82,7 @@ public class UserImplementation implements UserService {
     public void deleteUser(String userId) {
 
         logger.info("Sending request to userRepository for delete user data of {}"+userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
         userRepository.delete(user);
         logger.info("Request complete for delete user data from of {}"+userId);
     }
@@ -114,7 +113,7 @@ public class UserImplementation implements UserService {
     public UserDto getUserById(String userId) {
 
         logger.info("Sending request to userRepository for getting single user of {}"+userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
         logger.info("request complete for getting single user of {}"+userId);
         return entityToDto(user);
     }
@@ -128,7 +127,7 @@ public class UserImplementation implements UserService {
     @Override
     public UserDto getUserByEmail(String email) {
         logger.info("Sending Request to userRepository for getting user by Email {} "+email);
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
         logger.info("request complete for getting user by Email {} "+email);
         return entityToDto(user);
     }
