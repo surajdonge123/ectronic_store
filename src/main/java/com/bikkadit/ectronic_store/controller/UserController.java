@@ -1,5 +1,4 @@
 package com.bikkadit.ectronic_store.controller;
-
 import com.bikkadit.ectronic_store.constant.AppConstant;
 import com.bikkadit.ectronic_store.dto.UserDto;
 import com.bikkadit.ectronic_store.helper.ApiResponse;
@@ -10,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -32,7 +31,7 @@ public class UserController {
      * @apiNote Create User
      */
     @PostMapping("/")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
         logger.info("Initiating request for create User ");
         UserDto userCreated = userService.createUser(userDto);
         logger.info("completed request for save user data ");
@@ -48,7 +47,7 @@ public class UserController {
      * @apiNote Update user data
      */
     @PostMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable String userId, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@Valid @PathVariable String userId, @RequestBody UserDto userDto) {
 
         logger.info("initiating request for update user : " + userId);
         UserDto userDto1 = userService.updateUser(userDto, userId);

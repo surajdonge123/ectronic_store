@@ -1,7 +1,7 @@
 package com.bikkadit.ectronic_store.dto;
 
+import com.bikkadit.ectronic_store.validation.ImageNameValid;
 import lombok.*;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -37,5 +37,6 @@ public class UserDto {
     private String password;
 
 
+  /*  @ImageNameValid*/
     private String imageName;
 }
