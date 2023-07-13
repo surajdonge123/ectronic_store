@@ -33,10 +33,9 @@ public class UserDto {
     private String about;
 
     @NotBlank
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)[a-zA-Z\\\\d]{8,}$",message = "Invalid details !!.Password must contains minimum one Capital one Small letter and one Number ")
+    @Size(min = 6,max = 10, message = "Invalid details !!.Password must contains minimum one Capital one Small letter and one Number ")
     private String password;
 
-
-  /*  @ImageNameValid*/
+    @ImageNameValid
     private String imageName;
 }
