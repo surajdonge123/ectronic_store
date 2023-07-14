@@ -1,5 +1,6 @@
 package com.bikkadit.ectronic_store.service.impl;
 
+import com.bikkadit.ectronic_store.exception.BadApiRequest;
 import com.bikkadit.ectronic_store.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ public class FileImplementation implements FileService {
        if (extension.equalsIgnoreCase(".png")||extension.equalsIgnoreCase(".jpg")||extension.equalsIgnoreCase(".jpeg")){
 
        }else{
+           throw new BadApiRequest("File with this "+extension+" is not allowed");
 
        }
 
