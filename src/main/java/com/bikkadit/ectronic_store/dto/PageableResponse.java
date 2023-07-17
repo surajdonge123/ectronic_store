@@ -1,7 +1,13 @@
 package com.bikkadit.ectronic_store.dto;
 
-import java.util.List;
+import lombok.*;
 
+import java.util.List;
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PageableResponse <T>{
     private List<T> contents;
     private int pageNumber;
