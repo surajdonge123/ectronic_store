@@ -10,6 +10,10 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
@@ -31,7 +35,7 @@ public class UserImplementation implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
         /**
-         * @apiNote logic for generate unique id in String Format
+         * @apiNote Logic for generate unique id in String Format
          */
         logger.info("Initiating request for generate unique id in String format ");
         String userId = UUID.randomUUID().toString();
@@ -94,10 +98,13 @@ public class UserImplementation implements UserService {
      * @apiNote get all users
      */
     @Override
-    public List<UserDto> getAllUsers() {
+    public List<UserDto> getAllUsers(int pageNumber,int pageSize,String sortBy,String sortDir) {
 
         logger.info("Sending Request to UserRepository for getting all the users ");
-        List<User> users = userRepository.findAll();
+        Sort sort = (sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending());
+        Pageable pageable= PageRequest.of(pageNumber, pageSize,sort);
+        Page<User> all = userRepository.findAll(pageable);
+        List<User> users = all.getContent();
         List<UserDto> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
         logger.info("Request complete for getting all data");
         return dtoList;
