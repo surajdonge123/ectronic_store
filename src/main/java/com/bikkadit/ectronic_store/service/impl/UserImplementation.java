@@ -1,9 +1,11 @@
 package com.bikkadit.ectronic_store.service.impl;
 
 import com.bikkadit.ectronic_store.constant.AppConstant;
+import com.bikkadit.ectronic_store.dto.PageableResponse;
 import com.bikkadit.ectronic_store.dto.UserDto;
 import com.bikkadit.ectronic_store.entity.User;
 import com.bikkadit.ectronic_store.exception.ResourceNotFoundException;
+import com.bikkadit.ectronic_store.helper.Helper;
 import com.bikkadit.ectronic_store.repository.UserRepository;
 import com.bikkadit.ectronic_store.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -15,22 +17,24 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 @Service
 public class UserImplementation implements UserService {
-    public static Logger logger= LoggerFactory.getLogger(UserImplementation.class);
+    public static Logger logger = LoggerFactory.getLogger(UserImplementation.class);
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private ModelMapper modelMapper;
 
     /**
-     * @auther Suraj
      * @param userDto
-     * @apiNote Logic for Create User
      * @return
+     * @auther Suraj
+     * @apiNote Logic for Create User
      */
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -55,16 +59,16 @@ public class UserImplementation implements UserService {
 
 
     /**
-     * @auther suraj
      * @param userDto
      * @param userId
-     * @apiNote update user
      * @return
+     * @auther suraj
+     * @apiNote update user
      */
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
 
-        logger.info("Sending request to UserRepository for update user data of {} "+userId);
+        logger.info("Sending request to UserRepository for update user data of {} " + userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
 
         user.setName(userDto.getName());
@@ -73,81 +77,82 @@ public class UserImplementation implements UserService {
         user.setPassword(userDto.getPassword());
         user.setImageName(userDto.getImageName());
         User updatedUser = userRepository.save(user);
-        logger.info("Request complete for update user data of {}"+userId);
+        logger.info("Request complete for update user data of {}" + userId);
         UserDto userDto1 = entityToDto(updatedUser);
         return userDto1;
     }
 
     /**
-     * @apiNote Delete user
      * @param userId
+     * @apiNote Delete user
      */
     @Override
     public void deleteUser(String userId) {
 
-        logger.info("Sending request to userRepository for delete user data of {}"+userId);
+        logger.info("Sending request to userRepository for delete user data of {}" + userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
         userRepository.delete(user);
-        logger.info("Request complete for delete user data from of {}"+userId);
+        logger.info("Request complete for delete user data from of {}" + userId);
     }
 
 
     /**
-     * @auther Suraj
      * @return
+     * @auther Suraj
      * @apiNote get all users
      */
     @Override
-    public List<UserDto> getAllUsers(int pageNumber,int pageSize,String sortBy,String sortDir) {
+    public PageableResponse<UserDto> getAllUsers(int pageNumber, int pageSize, String sortBy, String sortDir) {
 
         logger.info("Sending Request to UserRepository for getting all the users ");
-        Sort sort = (sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending());
-        Pageable pageable= PageRequest.of(pageNumber, pageSize,sort);
+        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
+        Pageable pageable = PageRequest.of(pageNumber-1, pageSize, sort);
         Page<User> all = userRepository.findAll(pageable);
-        List<User> users = all.getContent();
-        List<UserDto> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
+        PageableResponse<UserDto> pageableResponse = Helper.getPageableResponse(all, UserDto.class);
+
+
         logger.info("Request complete for getting all data");
-        return dtoList;
+        return pageableResponse;
     }
 
     /**
-     * @auther Suraj
      * @param userId
      * @return
+     * @auther Suraj
      * @apiNote get user by userId
      */
     @Override
     public UserDto getUserById(String userId) {
 
-        logger.info("Sending request to userRepository for getting single user of {}"+userId);
+        logger.info("Sending request to userRepository for getting single user of {}" + userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
-        logger.info("request complete for getting single user of {}"+userId);
+        logger.info("request complete for getting single user of {}" + userId);
         return entityToDto(user);
     }
 
     /**
-     * @auther suraj
      * @param email
-     * @apiNote get user by email
      * @return
+     * @auther suraj
+     * @apiNote get user by email
      */
     @Override
     public UserDto getUserByEmail(String email) {
-        logger.info("Sending Request to userRepository for getting user by Email {} "+email);
+        logger.info("Sending Request to userRepository for getting user by Email {} " + email);
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
-        logger.info("request complete for getting user by Email {} "+email);
+        logger.info("request complete for getting user by Email {} " + email);
         return entityToDto(user);
     }
 
     /**
-     * @auther suraj
      * @param keyword
      * @return
+     * @auther suraj
      * @apiNote getting user details by keyword
      */
     @Override
     public List<UserDto> searchUser(String keyword) {
-        logger.info("Sending Request to userRepository for getting user details using keyword {}"+keyword);
+        logger.info("Sending Request to userRepository for getting user details using keyword {}" + keyword);
         List<User> userList = userRepository.findByNameContaining(keyword);
         logger.info("request complete for getting details user using keyword");
         List<UserDto> dtolist = userList.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
@@ -156,7 +161,6 @@ public class UserImplementation implements UserService {
     }
 
     /**
-     *
      * @param userDto
      * @return
      * @apiNote Converting DTO to ENTITY class
@@ -178,7 +182,6 @@ public class UserImplementation implements UserService {
     }
 
     /**
-     *
      * @param saveUser
      * @return
      * @apiNote converting Entity class to Dto

@@ -1,5 +1,6 @@
 package com.bikkadit.ectronic_store.controller;
 import com.bikkadit.ectronic_store.constant.AppConstant;
+import com.bikkadit.ectronic_store.dto.PageableResponse;
 import com.bikkadit.ectronic_store.dto.UserDto;
 import com.bikkadit.ectronic_store.helper.ApiResponse;
 import com.bikkadit.ectronic_store.service.UserService;
@@ -77,14 +78,14 @@ public class UserController {
      * @apiNote Get all users
      */
     @GetMapping("/allUsers")
-    public ResponseEntity<List<UserDto>> getAllUser(
+    public ResponseEntity<PageableResponse<UserDto>> getAllUser(
             @RequestParam(value = "pageNumber",defaultValue = "0",required = false)int pageNumber,
             @RequestParam(value = "pageSize",defaultValue = "10",required = false)int pageSize,
             @RequestParam(value = "sortBy",defaultValue = "name",required = false)String sortBy,
             @RequestParam(value = "sortDir",defaultValue = "asc",required = false)String sortDir
     ) {
         logger.info("initiating request for getting all users");
-        List<UserDto> allUsers = userService.getAllUsers(pageNumber, pageSize,sortBy,sortDir);
+        PageableResponse<UserDto> allUsers = userService.getAllUsers(pageNumber, pageSize, sortBy, sortDir);
         logger.info("request complete for getting all users");
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
