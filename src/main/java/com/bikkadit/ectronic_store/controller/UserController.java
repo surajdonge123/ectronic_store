@@ -3,14 +3,19 @@ import com.bikkadit.ectronic_store.constant.AppConstant;
 import com.bikkadit.ectronic_store.dto.PageableResponse;
 import com.bikkadit.ectronic_store.dto.UserDto;
 import com.bikkadit.ectronic_store.helper.ApiResponse;
+import com.bikkadit.ectronic_store.helper.FileResponse;
+import com.bikkadit.ectronic_store.service.FileService;
 import com.bikkadit.ectronic_store.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -20,15 +25,20 @@ public class UserController {
 
     public static Logger logger = LoggerFactory.getLogger(UserController.class);
 
+    @Autowired
+    private FileService fileService;
 
     @Autowired
     private UserService userService;
 
+    @Value("${user.profile.image.path}")
+    private String imageUploadPath;
+
 
     /**
-     * @auther Suraj
      * @param userDto
      * @return
+     * @auther Suraj
      * @apiNote Create User
      */
     @PostMapping("/")
@@ -41,10 +51,10 @@ public class UserController {
 
 
     /**
-     * @auther suraj
      * @param userId
      * @param userDto
      * @return
+     * @auther suraj
      * @apiNote Update user data
      */
     @PostMapping("/{userId}")
@@ -79,10 +89,10 @@ public class UserController {
      */
     @GetMapping("/allUsers")
     public ResponseEntity<PageableResponse<UserDto>> getAllUser(
-            @RequestParam(value = "pageNumber",defaultValue = "0",required = false)int pageNumber,
-            @RequestParam(value = "pageSize",defaultValue = "10",required = false)int pageSize,
-            @RequestParam(value = "sortBy",defaultValue = "name",required = false)String sortBy,
-            @RequestParam(value = "sortDir",defaultValue = "asc",required = false)String sortDir
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "name", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
     ) {
         logger.info("initiating request for getting all users");
         PageableResponse<UserDto> allUsers = userService.getAllUsers(pageNumber, pageSize, sortBy, sortDir);
@@ -93,46 +103,58 @@ public class UserController {
 
     /**
      * @param userId
-     * @apiNote getting single user
      * @return
+     * @apiNote getting single user
      */
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> singleUser(@PathVariable String userId) {
 
-        logger.info("initiating request for getting single user using userId "+userId);
+        logger.info("initiating request for getting single user using userId " + userId);
         UserDto userById = userService.getUserById(userId);
-        logger.info("request complete for getting user using userId "+userId);
+        logger.info("request complete for getting user using userId " + userId);
         return new ResponseEntity<>(userById, HttpStatus.OK);
     }
 
 
     /**
-     *
      * @param email
-     * @apiNote getting user by email
      * @return
+     * @apiNote getting user by email
      */
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDto> getByEmail(@PathVariable String email) {
-        logger.info("initiating request for getting user by using email "+ email);
+        logger.info("initiating request for getting user by using email " + email);
         UserDto userByEmail = userService.getUserByEmail(email);
-        logger.info("request complete for getting user by using email " +email);
+        logger.info("request complete for getting user by using email " + email);
         return new ResponseEntity<>(userByEmail, HttpStatus.OK);
     }
 
     /**
-     *
      * @param keyword
-     * @apiNote search user using keyword
      * @return
+     * @apiNote search user using keyword
      */
     @GetMapping("/search/{keyword}")
     public ResponseEntity<List<UserDto>> searchByKeyword(@PathVariable String keyword) {
 
-        logger.info("initiating request for search user using keyword " +keyword);
+        logger.info("initiating request for search user using keyword " + keyword);
         List<UserDto> dtoList = userService.searchUser(keyword);
-        logger.info("request complete for search user using keyword "+keyword);
+        logger.info("request complete for search user using keyword " + keyword);
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
+
+    @PostMapping("/image/{userId}")
+    public ResponseEntity<FileResponse> uploadImage(@RequestParam ("userImage")MultipartFile file,@PathVariable String userId) throws IOException {
+        String imageName = fileService.uploadFile(file, imageUploadPath);
+
+        UserDto user = userService.getUserById(userId);
+        user.setImageName(imageName);
+        UserDto userDto = userService.updateUser(user, userId);
+
+
+        FileResponse fileUpload = FileResponse.builder().imageName(imageName).status(HttpStatus.OK).success(true).message(AppConstant.FILE_UPLOAD).build();
+        return new ResponseEntity<>(fileUpload,HttpStatus.CREATED);
+
     }
 
 }

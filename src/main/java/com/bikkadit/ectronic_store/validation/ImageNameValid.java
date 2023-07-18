@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = ImageNameValidator.class)
 public @interface  ImageNameValid {
     //Error message
-    String message() default "Image not valid !!";
+    String message() default "Invalid image name !!";
 
     //Represent Group of elements
     Class<?>[] groups() default { };
