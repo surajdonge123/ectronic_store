@@ -51,6 +51,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * @apiNote Handling BadApiRequest
+     * @param bad
+     * @return
+     */
     @ExceptionHandler(BadApiRequest.class)
     public ResponseEntity<ApiResponse> handleBadApiRequest(BadApiRequest bad){
         logger.info("Handling the Api Bad request");
