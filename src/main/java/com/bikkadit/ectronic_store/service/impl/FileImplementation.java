@@ -5,16 +5,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.File;
-import java.io.InputStream;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 @Service
 public class FileImplementation implements FileService {
 
     public static Logger logger= LoggerFactory.getLogger(FileImplementation.class);
 
+    /**
+     * @Auther Suraj
+     * @apiNote Logic for file upload
+     * @param file
+     * @param path
+     * @return
+     */
     @Override
-    public String uploadFile(MultipartFile file, String path) {
+    public String uploadFile(MultipartFile file, String path) throws IOException {
        String originalFileName=file.getOriginalFilename();
        logger.info("Filename : {}",originalFileName);
        String filename= UUID.randomUUID().toString();
@@ -24,15 +33,27 @@ public class FileImplementation implements FileService {
 
        if (extension.equalsIgnoreCase(".png")||extension.equalsIgnoreCase(".jpg")||extension.equalsIgnoreCase(".jpeg")){
 
+           //File save
+           File folder=new File(path);
+           if (!folder.exists()){
+               folder.mkdirs();
+           }
+           //upload file
+           Files.copy(file.getInputStream(), Paths.get(fullPathWithFileName));
+           return filenameWithExtension;
+
+
        }else{
            throw new BadApiRequest("File with this "+extension+" is not allowed");
-
        }
-        return null;
+
     }
 
     @Override
-    public InputStream getResource(String path, String name) {
-        return null;
+    public InputStream getResource(String path, String name) throws FileNotFoundException {
+
+        String fullPath=path+ File.separator+name;
+        InputStream inputStream=new FileInputStream(fullPath);
+        return inputStream;
     }
 }
