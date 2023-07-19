@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
 public class CategoryDto {
 
     private String categoryId;

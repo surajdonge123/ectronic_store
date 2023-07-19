@@ -1,6 +1,7 @@
 package com.bikkadit.ectronic_store.service;
 
 import com.bikkadit.ectronic_store.dto.CategoryDto;
+import com.bikkadit.ectronic_store.dto.PageableResponse;
 
 public interface CategoryService {
 
@@ -12,11 +13,13 @@ public interface CategoryService {
 
     //Delete
     void deleteCategory(String categoryId);
-    //get single
-
 
     //get all
+    PageableResponse<CategoryDto> getAll();
 
+
+    //get single category
+    CategoryDto getSingleCategory(String categoryId);
 
 
 }
