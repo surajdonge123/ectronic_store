@@ -148,6 +148,15 @@ public class UserController {
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
+    /**
+     * @author Suraj
+     * @param file
+     * @param userId
+     * @return
+     * @apiNote Api for uploading user image
+     * @throws IOException
+     */
+
     @PostMapping("/image/{userId}")
     public ResponseEntity<FileResponse> uploadImage(@RequestParam ("userImage")MultipartFile file,@PathVariable String userId) throws IOException {
         logger.info("initialising request using fileService with the help of {},{}"+file,imageUploadPath);
@@ -162,9 +171,12 @@ public class UserController {
         return new ResponseEntity<>(fileUpload,HttpStatus.CREATED);
     }
 
+
     @GetMapping("/images/{userId}")
     public void serveUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
+        logger.info("Initialising request for getting user by using userId {}"+userId);
         UserDto user = userService.getUserById(userId);
+        logger.info("request complete for getting users using userId {]"+userId);
         logger.info("User image name {}"+user.getImageName());
         InputStream resource = fileService.getResource(imageUploadPath, user.getImageName());
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
