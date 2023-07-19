@@ -75,8 +75,8 @@ public class CategoryImplementation implements CategoryService {
 
     @Override
     public CategoryDto getSingleCategory(String categoryId) {
-       /* Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
-        CategoryDto map = modelMapper.map(category, CategoryDto.class);*/
-        return null;
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
+        CategoryDto map = modelMapper.map(category, CategoryDto.class);
+        return map;
     }
 }
