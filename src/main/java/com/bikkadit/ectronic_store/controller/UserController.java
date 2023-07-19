@@ -150,25 +150,23 @@ public class UserController {
 
     @PostMapping("/image/{userId}")
     public ResponseEntity<FileResponse> uploadImage(@RequestParam ("userImage")MultipartFile file,@PathVariable String userId) throws IOException {
+        logger.info("initialising request using fileService with the help of {},{}"+file,imageUploadPath);
         String imageName = fileService.uploadFile(file, imageUploadPath);
-
+        logger.info("initialising request for getting user by user Id {} "+userId);
         UserDto user = userService.getUserById(userId);
         user.setImageName(imageName);
         UserDto userDto = userService.updateUser(user, userId);
-
-
+        logger.info("request complete for getting users using user Id {} "+userId);
         FileResponse fileUpload = FileResponse.builder().imageName(imageName).status(HttpStatus.OK).success(true).message(AppConstant.FILE_UPLOAD).build();
+        logger.info("request complete for uploading image {}"+fileUpload);
         return new ResponseEntity<>(fileUpload,HttpStatus.CREATED);
-
     }
 
     @GetMapping("/images/{userId}")
     public void serveUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
-
         UserDto user = userService.getUserById(userId);
         logger.info("User image name {}"+user.getImageName());
         InputStream resource = fileService.getResource(imageUploadPath, user.getImageName());
-
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         StreamUtils.copy(resource,response.getOutputStream());
 
