@@ -8,11 +8,15 @@ import com.bikkadit.ectronic_store.exception.ResourceNotFoundException;
 import com.bikkadit.ectronic_store.repository.CategoryRepository;
 import com.bikkadit.ectronic_store.service.CategoryService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CategoryImplementation implements CategoryService {
+
+    private Logger logger= LoggerFactory.getLogger(CategoryImplementation.class);
 
     @Autowired
     private CategoryRepository categoryRepository;
