@@ -1,10 +1,7 @@
 package com.bikkadit.ectronic_store.validation;
-
-
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
-
 @Target({ElementType.FIELD,ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
