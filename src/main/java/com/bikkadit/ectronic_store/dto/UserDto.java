@@ -1,5 +1,4 @@
 package com.bikkadit.ectronic_store.dto;
-
 import com.bikkadit.ectronic_store.validation.ImageNameValid;
 import lombok.*;
 import javax.validation.constraints.Email;

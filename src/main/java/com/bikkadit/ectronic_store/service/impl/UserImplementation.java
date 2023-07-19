@@ -12,12 +12,18 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,6 +35,9 @@ public class UserImplementation implements UserService {
     private UserRepository userRepository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Value("${user.profile.image.path}")
+    private String imagePath;
 
     /**
      * @param userDto
@@ -70,7 +79,6 @@ public class UserImplementation implements UserService {
 
         logger.info("Sending request to UserRepository for update user data of {} " + userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
-
         user.setName(userDto.getName());
         user.setAbout(userDto.getAbout());
         user.setGender(userDto.getGender());
@@ -93,12 +101,23 @@ public class UserImplementation implements UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
         userRepository.delete(user);
         logger.info("Request complete for delete user data from of {}" + userId);
-    }
 
+        //for delete userImage
+        String fullPath = imagePath + user.getImageName();
+        try {
+            Path path=Paths.get(fullPath);
+            Files.delete(path);
+        }catch (NoSuchFileException e){
+            logger.info("No user image found in folder");
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * @return
-     * @auther Suraj
+     * @author Suraj
      * @apiNote get all users
      */
     @Override
