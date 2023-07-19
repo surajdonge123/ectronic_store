@@ -171,7 +171,13 @@ public class UserController {
         return new ResponseEntity<>(fileUpload,HttpStatus.CREATED);
     }
 
-
+    /**
+     * @Author Suraj
+     * @param userId
+     * @param response
+     * @apiNote Api for serveUserImage
+     * @throws IOException
+     */
     @GetMapping("/images/{userId}")
     public void serveUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
         logger.info("Initialising request for getting user by using userId {}"+userId);
