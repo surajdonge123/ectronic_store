@@ -34,7 +34,7 @@ public class CategoryImplementation implements CategoryService {
      * @Author Suraj
      * @apiNote Logic for Create  category
      * @param categoryDto
-     * @return
+     * @return dto
      */
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
@@ -55,7 +55,7 @@ public class CategoryImplementation implements CategoryService {
      * @apiNote Logic for Update category
      * @param categoryDto
      * @param categoryId
-     * @return
+     * @return dto
      * @exception ResourceNotFoundException
      *
      */
@@ -88,11 +88,23 @@ public class CategoryImplementation implements CategoryService {
     }
 
 
+    /**
+     * @apiNote logic for get all category
+     * @Author Suraj
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return response
+     */
     @Override
     public PageableResponse<CategoryDto> getAll(int pageNumber, int pageSize, String sortBy, String sortDir) {
+
         Sort sort=(sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending());
         Pageable pageable= PageRequest.of(pageNumber,pageSize,sort);
+        logger.info("Initialising request for getAll category ");
         Page<Category> page = categoryRepository.findAll(pageable);
+        logger.info("Request complete for getAll category ");
         PageableResponse<CategoryDto> response = Helper.getPageableResponse(page, CategoryDto.class);
         return response;
     }
