@@ -47,9 +47,16 @@ public class CategoryController {
         return new ResponseEntity<>(dto,HttpStatus.CREATED);
     }
 
+    /**
+     * @apiNote api for delete category
+     * @param catId
+     * @return
+     */
     @DeleteMapping("/{catId}")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable String catId){
+        logger.info("Initialising Request for delete category {}"+catId);
         categoryService.deleteCategory(catId);
+        logger.info("Request complete for deleteCategory {} "+catId);
         ApiResponse response = ApiResponse.builder().message(AppConstant.USER_DELETE).success(true).status(HttpStatus.OK).build();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
