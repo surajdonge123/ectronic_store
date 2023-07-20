@@ -108,9 +108,18 @@ public class CategoryImplementation implements CategoryService {
         PageableResponse<CategoryDto> response = Helper.getPageableResponse(page, CategoryDto.class);
         return response;
     }
+
+    /**
+     * @Author Suraj
+     * @apiNote logic for getSingleCategory
+     * @param categoryId
+     * @return map
+     */
     @Override
     public CategoryDto getSingleCategory(String categoryId) {
+        logger.info("Initialising request for getSingleId");
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
+        logger.info("request complete for getSingleId {}"+category);
         CategoryDto map = modelMapper.map(category, CategoryDto.class);
         return map;
     }
