@@ -70,9 +70,17 @@ public class CategoryController {
         return new ResponseEntity<>(allCategory,HttpStatus.OK);
     }
 
+    /**
+     * @apiNote api for getSingleCategory
+     * @param catId
+     * @return
+     */
     @GetMapping("/{catId}")
     public ResponseEntity<CategoryDto> getSingleCategory(@PathVariable String catId) {
+        logger.info("Initialising Request for getSingleCategory category {}"+catId);
         CategoryDto singleCategory = categoryService.getSingleCategory(catId);
+        logger.info("Request complete for getSingleCategory {} "+catId);
+
         return new ResponseEntity<>(singleCategory, HttpStatus.OK);
     }
 
