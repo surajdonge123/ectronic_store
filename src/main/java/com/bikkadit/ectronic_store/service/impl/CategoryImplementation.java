@@ -43,9 +43,10 @@ public class CategoryImplementation implements CategoryService {
         String categoryId = UUID.randomUUID().toString();
         logger.info("Complete request for generating categoryId {}"+categoryId);
         categoryDto.setCategoryId(categoryId);
-
         Category category = modelMapper.map(categoryDto, Category.class);
+        logger.info("request start for creating Category");
         Category savedCategory = categoryRepository.save(category);
+        logger.info("request complete for creating Category {}"+savedCategory);
         CategoryDto dto = modelMapper.map(savedCategory, CategoryDto.class);
         return dto;
     }
