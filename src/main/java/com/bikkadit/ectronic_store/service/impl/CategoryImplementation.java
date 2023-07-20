@@ -74,9 +74,16 @@ public class CategoryImplementation implements CategoryService {
         return dto;
     }
 
+    /**
+     * @apiNote Logic for deleteCategory
+     * @param categoryId
+     * @exception ResourceNotFoundException
+     */
     @Override
     public void deleteCategory(String categoryId) {
+        logger.info("Initialising request for delete category for "+categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
+        logger.info("Initialising request completed for delete category for"+categoryId);
         categoryRepository.delete(category);
     }
 
