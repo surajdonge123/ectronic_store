@@ -33,9 +33,17 @@ public class CategoryController {
         return new ResponseEntity<CategoryDto>(category, HttpStatus.CREATED);
     }
 
+    /**
+     * @apiNote Api update Category
+     * @param categoryDto
+     * @param categoryId
+     * @return
+     */
     @PutMapping("/{categoryId}")
     public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto ,@PathVariable String categoryId){
+        logger.info("Initialising Request for Update category {}"+categoryId);
         CategoryDto dto = categoryService.updateCategory(categoryDto, categoryId);
+        logger.info("Request complete for updateCategory {}"+dto);
         return new ResponseEntity<>(dto,HttpStatus.CREATED);
     }
 
