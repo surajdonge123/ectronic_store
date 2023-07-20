@@ -31,77 +31,76 @@ public class CategoryImplementation implements CategoryService {
 
 
     /**
-     * @Author Suraj
-     * @apiNote Logic for Create  category
      * @param categoryDto
      * @return dto
+     * @Author Suraj
+     * @apiNote Logic for Create  category
      */
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
 
         logger.info("Initialising request for generating String categoryId ");
         String categoryId = UUID.randomUUID().toString();
-        logger.info("Complete request for generating categoryId {}"+categoryId);
+        logger.info(" Request Complete for generating categoryId {}" + categoryId);
         categoryDto.setCategoryId(categoryId);
         Category category = modelMapper.map(categoryDto, Category.class);
         logger.info("request start for creating Category");
         Category savedCategory = categoryRepository.save(category);
-        logger.info("request complete for creating Category {}"+savedCategory);
+        logger.info("request complete for creating Category {}" + savedCategory);
         CategoryDto dto = modelMapper.map(savedCategory, CategoryDto.class);
         return dto;
     }
 
     /**
-     * @apiNote Logic for Update category
      * @param categoryDto
      * @param categoryId
      * @return dto
-     * @exception ResourceNotFoundException
-     *
+     * @throws ResourceNotFoundException
+     * @apiNote Logic for Update category
      */
     @Override
     public CategoryDto updateCategory(CategoryDto categoryDto, String categoryId) {
         logger.info("Initialising request for getSingleId");
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
-        logger.info("request complete for getSingleId {}"+category);
+        logger.info("request complete for getSingleId {}" + category);
         category.setTitle(categoryDto.getTitle());
         category.setDescription(categoryDto.getDescription());
         category.setCoverImage(categoryDto.getCoverImage());
         logger.info("Request Start for Update Category");
         Category updatedCategory = categoryRepository.save(category);
-        logger.info("Request completed for update category {}"+updatedCategory);
+        logger.info("Request completed for update category {}" + updatedCategory);
         CategoryDto dto = modelMapper.map(updatedCategory, CategoryDto.class);
         return dto;
     }
 
     /**
-     * @apiNote Logic for deleteCategory
      * @param categoryId
-     * @exception ResourceNotFoundException
+     * @throws ResourceNotFoundException
+     * @apiNote Logic for deleteCategory
      */
     @Override
     public void deleteCategory(String categoryId) {
-        logger.info("Initialising request for delete category for "+categoryId);
+        logger.info("Initialising request for delete category for " + categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
-        logger.info("Initialising request completed for delete category for"+categoryId);
+        logger.info("Initialising request completed for delete category for" + categoryId);
         categoryRepository.delete(category);
     }
 
 
     /**
-     * @apiNote logic for get all category
-     * @Author Suraj
      * @param pageNumber
      * @param pageSize
      * @param sortBy
      * @param sortDir
      * @return response
+     * @apiNote logic for get all category
+     * @Author Suraj
      */
     @Override
     public PageableResponse<CategoryDto> getAll(int pageNumber, int pageSize, String sortBy, String sortDir) {
 
-        Sort sort=(sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending());
-        Pageable pageable= PageRequest.of(pageNumber,pageSize,sort);
+        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         logger.info("Initialising request for getAll category ");
         Page<Category> page = categoryRepository.findAll(pageable);
         logger.info("Request complete for getAll category ");
@@ -110,16 +109,16 @@ public class CategoryImplementation implements CategoryService {
     }
 
     /**
-     * @Author Suraj
-     * @apiNote logic for getSingleCategory
      * @param categoryId
      * @return map
+     * @Author Suraj
+     * @apiNote logic for getSingleCategory
      */
     @Override
     public CategoryDto getSingleCategory(String categoryId) {
         logger.info("Initialising request for getSingleId");
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
-        logger.info("request complete for getSingleId {}"+category);
+        logger.info("request complete for getSingleId {}" + category);
         CategoryDto map = modelMapper.map(category, CategoryDto.class);
         return map;
     }
