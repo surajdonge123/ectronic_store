@@ -53,7 +53,6 @@ public class UserController {
         return new ResponseEntity<>(userCreated, HttpStatus.CREATED);
     }
 
-
     /**
      * @param userId
      * @param userDto
