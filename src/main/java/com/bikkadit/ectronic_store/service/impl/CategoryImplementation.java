@@ -32,7 +32,7 @@ public class CategoryImplementation implements CategoryService {
 
     /**
      * @Author Suraj
-     * @apiNote Api for Create  category
+     * @apiNote Logic for Create  category
      * @param categoryDto
      * @return
      */
@@ -51,13 +51,25 @@ public class CategoryImplementation implements CategoryService {
         return dto;
     }
 
+    /**
+     * @apiNote Logic for Update category
+     * @param categoryDto
+     * @param categoryId
+     * @return
+     * @exception ResourceNotFoundException
+     *
+     */
     @Override
     public CategoryDto updateCategory(CategoryDto categoryDto, String categoryId) {
+        logger.info("Initialising request for getSingleId");
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
+        logger.info("request complete for getSingleId {}"+category);
         category.setTitle(categoryDto.getTitle());
         category.setDescription(categoryDto.getDescription());
         category.setCoverImage(categoryDto.getCoverImage());
+        logger.info("Request Start for Update Category");
         Category updatedCategory = categoryRepository.save(category);
+        logger.info("Request completed for update category {}"+updatedCategory);
         CategoryDto dto = modelMapper.map(updatedCategory, CategoryDto.class);
         return dto;
     }
