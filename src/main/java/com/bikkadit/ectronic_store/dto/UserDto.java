@@ -5,7 +5,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 @Builder
 @Getter
 @Setter
@@ -31,8 +30,9 @@ public class UserDto {
     @Size(min = 10,max = 255,message = "Invalid details !! Describe more about yourself")
     private String about;
 
-    @NotBlank
-    @Size(min = 6,max = 10, message = "Invalid details !!.Password must contains minimum one Capital one Small letter and one Number ")
+    @NotBlank(message = "Password should not be null")
+    @Pattern(regexp = "^.(?=.{8,})(?=..[0-9])(?=.[a-z])(?=.[A-Z])(?=.[@#$%^&+=]).$",
+             message = "Password should contains minimum one uppercase,lowercase,digit and one special characters")
     private String password;
 
     @ImageNameValid
