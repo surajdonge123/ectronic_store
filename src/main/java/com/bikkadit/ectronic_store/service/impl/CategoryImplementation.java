@@ -43,13 +43,6 @@ public class CategoryImplementation implements CategoryService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
-    private FileService fileService;
-
-
     @Value("${category.profile.image.path}")
     private String imagePath;
 

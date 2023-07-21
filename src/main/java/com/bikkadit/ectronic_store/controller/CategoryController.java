@@ -118,7 +118,9 @@ public class CategoryController {
     @PostMapping("/image/{catId}")
     public ResponseEntity<FileResponse> uploadImage(@RequestParam("categoryImage") MultipartFile file,@PathVariable String catId) throws IOException, IOException {
         String uploadFile = fileService.uploadFile(file, imageUploadPath);
+        logger.info("initialising request for getting single category");
         CategoryDto category = categoryService.getSingleCategory(catId);
+        logger.info("Request completed for getting category {}"+category);
         category.setCoverImage(uploadFile);
         CategoryDto categoryDto = categoryService.updateCategory(category, catId);
         FileResponse fileResponse = FileResponse.builder().imageName(uploadFile).success(true)
