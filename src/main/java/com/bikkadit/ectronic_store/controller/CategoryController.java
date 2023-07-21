@@ -12,12 +12,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @RequestMapping("/categories")
@@ -120,6 +124,18 @@ public class CategoryController {
         FileResponse fileResponse = FileResponse.builder().imageName(uploadFile).success(true)
                 .status(HttpStatus.OK).message(AppConstant.FILE_UPLOAD).build();
         return new ResponseEntity<>(fileResponse,HttpStatus.OK);
+    }
+
+    @GetMapping("/images/{catId}")
+    public void serveUserImage(@PathVariable String catId, HttpServletResponse response) throws IOException {
+        logger.info("Initialising request for getting category by using catId {}"+catId);
+        CategoryDto category = categoryService.getSingleCategory(catId);
+        logger.info("request complete for getting category using catId {]"+catId);
+        logger.info("User image name {}"+category.getCoverImage());
+        InputStream resource = fileService.getResource(imageUploadPath, category.getCoverImage());
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(resource,response.getOutputStream());
+
     }
 
 

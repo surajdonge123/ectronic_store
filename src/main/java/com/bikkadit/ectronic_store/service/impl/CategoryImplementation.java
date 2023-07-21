@@ -2,12 +2,14 @@ package com.bikkadit.ectronic_store.service.impl;
 
 import com.bikkadit.ectronic_store.constant.AppConstant;
 import com.bikkadit.ectronic_store.dto.CategoryDto;
+import com.bikkadit.ectronic_store.dto.UserDto;
 import com.bikkadit.ectronic_store.helper.PageableResponse;
 import com.bikkadit.ectronic_store.entity.Category;
 import com.bikkadit.ectronic_store.exception.ResourceNotFoundException;
 import com.bikkadit.ectronic_store.helper.Helper;
 import com.bikkadit.ectronic_store.repository.CategoryRepository;
 import com.bikkadit.ectronic_store.service.CategoryService;
+import com.bikkadit.ectronic_store.service.FileService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +19,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -33,6 +42,12 @@ public class CategoryImplementation implements CategoryService {
     private CategoryRepository categoryRepository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private FileService fileService;
 
 
     @Value("${category.profile.image.path}")
@@ -146,4 +161,6 @@ public class CategoryImplementation implements CategoryService {
         CategoryDto map = modelMapper.map(category, CategoryDto.class);
         return map;
     }
+
+
 }
