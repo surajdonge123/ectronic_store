@@ -1,5 +1,5 @@
 package com.bikkadit.ectronic_store.service;
-import com.bikkadit.ectronic_store.dto.PageableResponse;
+import com.bikkadit.ectronic_store.helper.PageableResponse;
 import com.bikkadit.ectronic_store.dto.UserDto;
 import java.util.List;
 public interface UserService {

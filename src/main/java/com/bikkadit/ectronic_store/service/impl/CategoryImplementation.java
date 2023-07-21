@@ -2,7 +2,7 @@ package com.bikkadit.ectronic_store.service.impl;
 
 import com.bikkadit.ectronic_store.constant.AppConstant;
 import com.bikkadit.ectronic_store.dto.CategoryDto;
-import com.bikkadit.ectronic_store.dto.PageableResponse;
+import com.bikkadit.ectronic_store.helper.PageableResponse;
 import com.bikkadit.ectronic_store.entity.Category;
 import com.bikkadit.ectronic_store.exception.ResourceNotFoundException;
 import com.bikkadit.ectronic_store.helper.Helper;

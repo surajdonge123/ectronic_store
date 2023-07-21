@@ -1,7 +1,7 @@
 package com.bikkadit.ectronic_store.service;
 
 import com.bikkadit.ectronic_store.dto.CategoryDto;
-import com.bikkadit.ectronic_store.dto.PageableResponse;
+import com.bikkadit.ectronic_store.helper.PageableResponse;
 
 public interface CategoryService {
 

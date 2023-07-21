@@ -3,9 +3,8 @@ package com.bikkadit.ectronic_store.controller;
 import com.bikkadit.ectronic_store.constant.AppConstant;
 import com.bikkadit.ectronic_store.constant.PaginationConstant;
 import com.bikkadit.ectronic_store.dto.CategoryDto;
-import com.bikkadit.ectronic_store.dto.PageableResponse;
+import com.bikkadit.ectronic_store.helper.PageableResponse;
 import com.bikkadit.ectronic_store.helper.ApiResponse;
-import com.bikkadit.ectronic_store.helper.FileResponse;
 import com.bikkadit.ectronic_store.service.CategoryService;
 import com.bikkadit.ectronic_store.service.FileService;
 import org.slf4j.Logger;
@@ -15,10 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/categories")

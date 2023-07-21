@@ -1,7 +1,7 @@
 package com.bikkadit.ectronic_store.controller;
 import com.bikkadit.ectronic_store.constant.AppConstant;
 import com.bikkadit.ectronic_store.constant.PaginationConstant;
-import com.bikkadit.ectronic_store.dto.PageableResponse;
+import com.bikkadit.ectronic_store.helper.PageableResponse;
 import com.bikkadit.ectronic_store.dto.UserDto;
 import com.bikkadit.ectronic_store.helper.ApiResponse;
 import com.bikkadit.ectronic_store.helper.FileResponse;

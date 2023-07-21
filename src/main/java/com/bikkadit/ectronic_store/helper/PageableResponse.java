@@ -1,4 +1,4 @@
-package com.bikkadit.ectronic_store.dto;
+package com.bikkadit.ectronic_store.helper;
 
 import lombok.*;
 
