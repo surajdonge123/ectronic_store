@@ -1,6 +1,7 @@
 package com.bikkadit.ectronic_store.controller;
 
 import com.bikkadit.ectronic_store.constant.AppConstant;
+import com.bikkadit.ectronic_store.constant.PaginationConstant;
 import com.bikkadit.ectronic_store.dto.CategoryDto;
 import com.bikkadit.ectronic_store.dto.PageableResponse;
 import com.bikkadit.ectronic_store.helper.ApiResponse;
@@ -87,10 +88,10 @@ public class CategoryController {
      */
     @GetMapping("/")
     public ResponseEntity<PageableResponse<CategoryDto>> getAllCategory(
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+            @RequestParam(value = "pageNumber", defaultValue = PaginationConstant.PAGE_NUMBER, required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = PaginationConstant.PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = PaginationConstant.SORT_BY_CATEGORY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = PaginationConstant.SORT_DIR, required = false) String sortDir) {
         logger.info("Initialising Request for getAllCategory");
         PageableResponse<CategoryDto> allCategory = categoryService.getAll(pageNumber, pageSize, sortBy, sortDir);
         logger.info("Request complete for getAllCategory ");
