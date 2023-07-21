@@ -4,13 +4,20 @@ import com.bikkadit.ectronic_store.constant.AppConstant;
 import com.bikkadit.ectronic_store.dto.CategoryDto;
 import com.bikkadit.ectronic_store.dto.PageableResponse;
 import com.bikkadit.ectronic_store.helper.ApiResponse;
+import com.bikkadit.ectronic_store.helper.FileResponse;
 import com.bikkadit.ectronic_store.service.CategoryService;
+import com.bikkadit.ectronic_store.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/categories")
@@ -21,6 +28,12 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private FileService fileService;
+
+    @Value("${user.profile.image.path}")
+    private String imageUploadPath;
+
     /**
      * @param categoryDto
      * @return category
@@ -28,7 +41,7 @@ public class CategoryController {
      * @apiNote Api for CreateCategory
      */
     @PostMapping("/")
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
         logger.info("Initialising Request for createCategory ");
         CategoryDto category = categoryService.createCategory(categoryDto);
         logger.info("Request complete for createCategory {}" + category);
@@ -42,7 +55,7 @@ public class CategoryController {
      * @apiNote Api update Category
      */
     @PutMapping("/{categoryId}")
-    public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto, @PathVariable String categoryId) {
+    public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable String categoryId) {
         logger.info("Initialising Request for Update category {}" + categoryId);
         CategoryDto dto = categoryService.updateCategory(categoryDto, categoryId);
         logger.info("Request complete for updateCategory {}" + dto);
@@ -90,11 +103,23 @@ public class CategoryController {
      * @apiNote api for getSingleCategory
      */
     @GetMapping("/{catId}")
-    public ResponseEntity<CategoryDto> getSingleCategory(@PathVariable String catId) {
+    public ResponseEntity<CategoryDto> getSingleCategory( @PathVariable String catId) {
         logger.info("Initialising Request for getSingleCategory category {}" + catId);
         CategoryDto singleCategory = categoryService.getSingleCategory(catId);
         logger.info("Request complete for getSingleCategory {} " + catId);
         return new ResponseEntity<>(singleCategory, HttpStatus.OK);
     }
+
+
+    @PostMapping("/image/{catId}")
+    public ResponseEntity<FileResponse> uploadImage(@RequestParam("categoryImage")MultipartFile file,String catId) throws IOException {
+        String uploadFile = fileService.uploadFile(file, imageUploadPath);
+        CategoryDto category = categoryService.getSingleCategory(catId);
+        category.setCoverImage(uploadFile);
+        CategoryDto categoryDto = categoryService.updateCategory(category, catId);
+        FileResponse fileResponse = FileResponse.builder().imageName(uploadFile).success(true).status(HttpStatus.OK).message(AppConstant.FILE_UPLOAD).build();
+        return new ResponseEntity<>(fileResponse,HttpStatus.OK);
+    }
+
 
 }

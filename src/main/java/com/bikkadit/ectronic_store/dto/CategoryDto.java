@@ -1,6 +1,7 @@
 package com.bikkadit.ectronic_store.dto;
 
 
+import com.bikkadit.ectronic_store.validation.ImageNameValid;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -24,6 +25,8 @@ public class CategoryDto {
     @Size(min = 10,message ="invalid Description !! Description size should be more than 10 characters " )
     private String description;
 
+    @NotBlank
+    @ImageNameValid
     private String coverImage;
 
 }
