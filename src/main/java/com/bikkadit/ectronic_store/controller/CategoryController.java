@@ -111,6 +111,7 @@ public class CategoryController {
         return new ResponseEntity<>(singleCategory, HttpStatus.OK);
     }
 
+/*
 
     @PostMapping("/image/{catId}")
     public ResponseEntity<FileResponse> uploadImage(@RequestParam("categoryImage")MultipartFile file,String catId) throws IOException {
@@ -122,5 +123,6 @@ public class CategoryController {
         return new ResponseEntity<>(fileResponse,HttpStatus.OK);
     }
 
+*/
 
 }
