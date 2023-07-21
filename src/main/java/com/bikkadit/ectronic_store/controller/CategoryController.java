@@ -1,8 +1,8 @@
 package com.bikkadit.ectronic_store.controller;
-
 import com.bikkadit.ectronic_store.constant.AppConstant;
 import com.bikkadit.ectronic_store.constant.PaginationConstant;
 import com.bikkadit.ectronic_store.dto.CategoryDto;
+import com.bikkadit.ectronic_store.helper.FileResponse;
 import com.bikkadit.ectronic_store.helper.PageableResponse;
 import com.bikkadit.ectronic_store.helper.ApiResponse;
 import com.bikkadit.ectronic_store.service.CategoryService;
@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/categories")
@@ -29,7 +31,7 @@ public class CategoryController {
     @Autowired
     private FileService fileService;
 
-    @Value("${user.profile.image.path}")
+    @Value("${category.profile.image.path}")
     private String imageUploadPath;
 
     /**
@@ -108,18 +110,17 @@ public class CategoryController {
         return new ResponseEntity<>(singleCategory, HttpStatus.OK);
     }
 
-/*
 
     @PostMapping("/image/{catId}")
-    public ResponseEntity<FileResponse> uploadImage(@RequestParam("categoryImage")MultipartFile file,String catId) throws IOException {
+    public ResponseEntity<FileResponse> uploadImage(@RequestParam("categoryImage") MultipartFile file,@PathVariable String catId) throws IOException, IOException {
         String uploadFile = fileService.uploadFile(file, imageUploadPath);
         CategoryDto category = categoryService.getSingleCategory(catId);
         category.setCoverImage(uploadFile);
         CategoryDto categoryDto = categoryService.updateCategory(category, catId);
-        FileResponse fileResponse = FileResponse.builder().imageName(uploadFile).success(true).status(HttpStatus.OK).message(AppConstant.FILE_UPLOAD).build();
+        FileResponse fileResponse = FileResponse.builder().imageName(uploadFile).success(true)
+                .status(HttpStatus.OK).message(AppConstant.FILE_UPLOAD).build();
         return new ResponseEntity<>(fileResponse,HttpStatus.OK);
     }
 
-*/
 
 }

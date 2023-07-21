@@ -12,12 +12,17 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
@@ -28,6 +33,10 @@ public class CategoryImplementation implements CategoryService {
     private CategoryRepository categoryRepository;
     @Autowired
     private ModelMapper modelMapper;
+
+
+    @Value("${category.profile.image.path}")
+    private String imagePath;
 
 
     /**
@@ -84,6 +93,21 @@ public class CategoryImplementation implements CategoryService {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
         logger.info("Initialising request completed for delete category for" + categoryId);
         categoryRepository.delete(category);
+
+        //for delete userImage
+        String fullPath = imagePath + category.getCoverImage();
+        try {
+            Path path= Paths.get(fullPath);
+            Files.delete(path);
+        }catch (NoSuchFileException e){
+            logger.info("No user image found in folder");
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
     }
 
 
