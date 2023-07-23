@@ -54,16 +54,23 @@ public class ProductImplementation implements ProductService {
     @Override
     public void deleteProduct(String proId) {
 
+        Product product = productRepository.findById(proId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.PRODUCT_NOT_FOUND));
+        productRepository.delete(product);
+
     }
 
     @Override
     public List<ProductDto> getAllProduct() {
+
+
         return null;
     }
 
     @Override
     public ProductDto getSingleProduct(String proId) {
-        return null;
+        Product product = this.productRepository.findById(proId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.PRODUCT_NOT_FOUND));
+        ProductDto dto = modelMapper.map(product, ProductDto.class);
+        return dto;
     }
 
     @Override

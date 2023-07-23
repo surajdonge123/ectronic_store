@@ -8,4 +8,6 @@ public class AppConstant {
     public static final String USER_DELETE="User delete Successfully !!";
 
     public static final String FILE_UPLOAD="File has been posted successfully";
+
+    public static final String PRODUCT_NOT_FOUND="Product not found with given Id";
 }
