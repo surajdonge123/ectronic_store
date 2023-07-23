@@ -4,10 +4,16 @@ import com.bikkadit.ectronic_store.constant.AppConstant;
 import com.bikkadit.ectronic_store.dto.ProductDto;
 import com.bikkadit.ectronic_store.entity.Product;
 import com.bikkadit.ectronic_store.exception.ResourceNotFoundException;
+import com.bikkadit.ectronic_store.helper.Helper;
+import com.bikkadit.ectronic_store.helper.PageableResponse;
 import com.bikkadit.ectronic_store.repository.ProductRepository;
 import com.bikkadit.ectronic_store.service.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,12 +65,7 @@ public class ProductImplementation implements ProductService {
 
     }
 
-    @Override
-    public List<ProductDto> getAllProduct() {
 
-
-        return null;
-    }
 
     @Override
     public ProductDto getSingleProduct(String proId) {
@@ -72,14 +73,33 @@ public class ProductImplementation implements ProductService {
         ProductDto dto = modelMapper.map(product, ProductDto.class);
         return dto;
     }
+    @Override
+    public PageableResponse<ProductDto> getAllProduct(int pageNumber, int pageSize, String sortBy, String sortDir) {
+
+        Sort sort=(sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending());
+        Pageable pageable= PageRequest.of(pageNumber,pageSize,sort);
+        Page<Product> allProducts = this.productRepository.findAll(pageable);
+        PageableResponse<ProductDto> pageableResponse = Helper.getPageableResponse(allProducts, ProductDto.class);
+        return pageableResponse;
+    }
+
 
     @Override
-    public List<ProductDto> getByTitle(String subTitle) {
-        return null;
+    public PageableResponse<ProductDto> getByTitle(String subTitle, int pageNumber, int pageSize, String sortBy, String sortDir) {
+        Sort sort=(sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending());
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Page<Product> titleContaining = this.productRepository.findByTitleContaining(subTitle, pageable);
+        PageableResponse<ProductDto> pageableResponse = Helper.getPageableResponse(titleContaining, ProductDto.class);
+        return pageableResponse;
     }
 
     @Override
-    public List<ProductDto> getByLive() {
-        return null;
+    public PageableResponse<ProductDto> getByLive(int pageNumber, int pageSize, String sortBy, String sortDir) {
+        Sort sort=(sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending());
+        Pageable pageable= PageRequest.of(pageNumber,pageSize,sort);
+        Page<Product> byLiveTrue = this.productRepository.findByLiveTrue(pageable);
+        PageableResponse<ProductDto> pageableResponse = Helper.getPageableResponse(byLiveTrue, ProductDto.class);
+        return pageableResponse;
     }
+
 }
