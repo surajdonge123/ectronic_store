@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    public ProductDto createProduct();
+    public ProductDto createProduct(ProductDto productDto);
 
     public ProductDto updateProduct(ProductDto productDto,String proId);
 
@@ -15,6 +15,10 @@ public interface ProductService {
     public List<ProductDto> getAllProduct();
 
     public ProductDto getSingleProduct(String proId);
+
+    List<ProductDto> getByTitle(String subTitle);
+
+    List<ProductDto> getByLive();
 
 
 

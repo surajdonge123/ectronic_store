@@ -30,9 +30,7 @@ public class FileImplementation implements FileService {
        String extension=originalFileName.substring(originalFileName.lastIndexOf("."));
        String filenameWithExtension=filename+extension;
        String fullPathWithFileName=path+File.separator+filenameWithExtension;
-
        if (extension.equalsIgnoreCase(".png")||extension.equalsIgnoreCase(".jpg")||extension.equalsIgnoreCase(".jpeg")){
-
            //File save
            File folder=new File(path);
            if (!folder.exists()){
@@ -41,7 +39,6 @@ public class FileImplementation implements FileService {
            //upload file
            Files.copy(file.getInputStream(), Paths.get(fullPathWithFileName));
            return filenameWithExtension;
-
 
        }else{
            throw new BadApiRequest("File with this "+extension+" is not allowed");
@@ -60,10 +57,10 @@ public class FileImplementation implements FileService {
     @Override
     public InputStream getResource(String path, String name) throws FileNotFoundException {
 
-        logger.info("initialising request for getResource :{}"+path);
+        logger.info("initialising request for getResource :{}",path);
         String fullPath=path+ File.separator+name;
         InputStream inputStream=new FileInputStream(fullPath);
-        logger.info("request completed for getResource :{}"+inputStream);
+        logger.info("request completed for getResource :{}",inputStream);
         return inputStream;
     }
 }

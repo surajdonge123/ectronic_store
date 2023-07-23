@@ -48,7 +48,7 @@ public class CategoryController {
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
         logger.info("Initialising Request for createCategory ");
         CategoryDto category = categoryService.createCategory(categoryDto);
-        logger.info("Request complete for createCategory {}" + category);
+        logger.info("Request complete for createCategory {}" , category);
         return new ResponseEntity<CategoryDto>(category, HttpStatus.CREATED);
     }
 
@@ -60,9 +60,9 @@ public class CategoryController {
      */
     @PutMapping("/{categoryId}")
     public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable String categoryId) {
-        logger.info("Initialising Request for Update category {}" + categoryId);
+        logger.info("Initialising Request for Update category {}" , categoryId);
         CategoryDto dto = categoryService.updateCategory(categoryDto, categoryId);
-        logger.info("Request complete for updateCategory {}" + dto);
+        logger.info("Request complete for updateCategory {}" , dto);
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
@@ -73,9 +73,9 @@ public class CategoryController {
      */
     @DeleteMapping("/{catId}")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable String catId) {
-        logger.info("Initialising Request for delete category {}" + catId);
+        logger.info("Initialising Request for delete category {}" , catId);
         categoryService.deleteCategory(catId);
-        logger.info("Request complete for deleteCategory {} " + catId);
+        logger.info("Request complete for deleteCategory {} " , catId);
         ApiResponse response = ApiResponse.builder().message(AppConstant.USER_DELETE).success(true).status(HttpStatus.OK).build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -108,9 +108,9 @@ public class CategoryController {
      */
     @GetMapping("/{catId}")
     public ResponseEntity<CategoryDto> getSingleCategory( @PathVariable String catId) {
-        logger.info("Initialising Request for getSingleCategory category {}" + catId);
+        logger.info("Initialising Request for getSingleCategory category {}" , catId);
         CategoryDto singleCategory = categoryService.getSingleCategory(catId);
-        logger.info("Request complete for getSingleCategory {} " + catId);
+        logger.info("Request complete for getSingleCategory {} " , catId);
         return new ResponseEntity<>(singleCategory, HttpStatus.OK);
     }
 
@@ -120,7 +120,7 @@ public class CategoryController {
         String uploadFile = fileService.uploadFile(file, imageUploadPath);
         logger.info("initialising request for getting single category");
         CategoryDto category = categoryService.getSingleCategory(catId);
-        logger.info("Request completed for getting category {}"+category);
+        logger.info("Request completed for getting category {}",category);
         category.setCoverImage(uploadFile);
         CategoryDto categoryDto = categoryService.updateCategory(category, catId);
         FileResponse fileResponse = FileResponse.builder().imageName(uploadFile).success(true)
@@ -130,9 +130,9 @@ public class CategoryController {
 
     @GetMapping("/images/{catId}")
     public void serveUserImage(@PathVariable String catId, HttpServletResponse response) throws IOException {
-        logger.info("Initialising request for getting category by using catId {}"+catId);
+        logger.info("Initialising request for getting category by using catId {}",catId);
         CategoryDto category = categoryService.getSingleCategory(catId);
-        logger.info("request complete for getting category using catId {]"+catId);
+        logger.info("request complete for getting category using catId {]",catId);
         logger.info("User image name {}"+category.getCoverImage());
         InputStream resource = fileService.getResource(imageUploadPath, category.getCoverImage());
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);

@@ -1,5 +1,4 @@
 package com.bikkadit.ectronic_store.service.impl;
-
 import com.bikkadit.ectronic_store.constant.AppConstant;
 import com.bikkadit.ectronic_store.helper.PageableResponse;
 import com.bikkadit.ectronic_store.dto.UserDto;
@@ -51,7 +50,7 @@ public class UserImplementation implements UserService {
          */
         logger.info("Initiating request for generate unique id in String format ");
         String userId = UUID.randomUUID().toString();
-        logger.info("Request complete for generating unique id in String format ");
+        logger.info("Request complete for generating unique id in String format ",userId);
         userDto.setUserId(userId);
 
         //Dto To Entity
@@ -76,7 +75,7 @@ public class UserImplementation implements UserService {
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
 
-        logger.info("Sending request to UserRepository for update user data of {} " + userId);
+        logger.info("Sending request to UserRepository for update user data of {} " , userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
         user.setName(userDto.getName());
         user.setAbout(userDto.getAbout());
@@ -84,7 +83,7 @@ public class UserImplementation implements UserService {
         user.setPassword(userDto.getPassword());
         user.setImageName(userDto.getImageName());
         User updatedUser = userRepository.save(user);
-        logger.info("Request complete for update user data of {}" + userId);
+        logger.info("Request complete for update user data of {}" , userId);
         UserDto userDto1 = entityToDto(updatedUser);
         return userDto1;
     }
@@ -96,10 +95,10 @@ public class UserImplementation implements UserService {
     @Override
     public void deleteUser(String userId) {
 
-        logger.info("Sending request to userRepository for delete user data of {}" + userId);
+        logger.info("Sending request to userRepository for delete user data of {}" , userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
         userRepository.delete(user);
-        logger.info("Request complete for delete user data from of {}" + userId);
+        logger.info("Request complete for delete user data from of {}" , userId);
 
         //for delete userImage
         String fullPath = imagePath + user.getImageName();
@@ -142,9 +141,9 @@ public class UserImplementation implements UserService {
     @Override
     public UserDto getUserById(String userId) {
 
-        logger.info("Sending request to userRepository for getting single user of {}" + userId);
+        logger.info("Sending request to userRepository for getting single user of {}" , userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
-        logger.info("request complete for getting single user of {}" + userId);
+        logger.info("request complete for getting single user of {}" , userId);
         return entityToDto(user);
     }
 
@@ -156,9 +155,9 @@ public class UserImplementation implements UserService {
      */
     @Override
     public UserDto getUserByEmail(String email) {
-        logger.info("Sending Request to userRepository for getting user by Email {} " + email);
+        logger.info("Sending Request to userRepository for getting user by Email {} " , email);
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
-        logger.info("request complete for getting user by Email {} " + email);
+        logger.info("request complete for getting user by Email {} " , email);
         return entityToDto(user);
     }
 
@@ -170,9 +169,9 @@ public class UserImplementation implements UserService {
      */
     @Override
     public List<UserDto> searchUser(String keyword) {
-        logger.info("Sending Request to userRepository for getting user details using keyword {}" + keyword);
+        logger.info("Sending Request to userRepository for getting user details using keyword {}" , keyword);
         List<User> userList = userRepository.findByNameContaining(keyword);
-        logger.info("request complete for getting details user using keyword");
+        logger.info("request complete for getting user details using keyword {}",keyword);
         List<UserDto> dtolist = userList.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
 
         return dtolist;
