@@ -31,6 +31,7 @@ public class Product {
     private Integer Quantity;
     private boolean live;
     private boolean stock;
+    private String productImage;
 
 
 }
