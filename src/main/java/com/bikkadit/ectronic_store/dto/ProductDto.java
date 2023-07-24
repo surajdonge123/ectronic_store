@@ -1,5 +1,6 @@
 package com.bikkadit.ectronic_store.dto;
 
+import com.bikkadit.ectronic_store.validation.ImageNameValid;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
@@ -43,6 +44,9 @@ public class ProductDto {
     private Integer Quantity;
     private boolean live;
     private boolean stock;
+
+    @ImageNameValid
+    private String productImage;
 
 
 }
