@@ -212,7 +212,7 @@ public class UserImplementation implements UserService {
                 .password(saveUser.getPassword())
                 .about(saveUser.getAbout())
                 .gender(saveUser.getGender())
-                .imageName(saveUser.getImageName())5555
+                .imageName(saveUser.getImageName())
                 .build();
 */
         return this.modelMapper.map(saveUser, UserDto.class);

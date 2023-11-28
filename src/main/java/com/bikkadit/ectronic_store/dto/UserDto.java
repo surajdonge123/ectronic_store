@@ -31,10 +31,11 @@ public class UserDto {
     private String about;
 
     @NotBlank(message = "Password should not be null")
-    @Pattern(regexp = "^.(?=.{8,})(?=..[0-9])(?=.[a-z])(?=.[A-Z])(?=.[@#$%^&+=]).$",
-             message = "Password should contains minimum one uppercase,lowercase,digit and one special characters")
+   // @Pattern(regexp = "^.(?=.{8,})(?=..[0-9])(?=.[a-z])(?=.[A-Z])(?=.[@#$%^&+=]).$",
+          //   message = "Password should contains minimum one uppercase,lowercase,digit and one special characters")
     private String password;
 
     @ImageNameValid
     private String imageName;
+
 }

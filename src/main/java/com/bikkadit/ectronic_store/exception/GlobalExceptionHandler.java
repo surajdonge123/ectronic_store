@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     /**
      * @param exception
      * @return
-     * @auther Suraj
+     * @Author Suraj
      * @apiNote Handle MethodArgumentNotValidException
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    /**
+    /**@Author Suraj
      * @apiNote Handling BadApiRequest
      * @param bad
      * @return

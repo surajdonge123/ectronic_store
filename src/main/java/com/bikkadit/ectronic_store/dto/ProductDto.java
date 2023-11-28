@@ -1,8 +1,5 @@
 package com.bikkadit.ectronic_store.dto;
-
-import com.bikkadit.ectronic_store.validation.ImageNameValid;
 import lombok.*;
-import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.Column;
 import javax.validation.constraints.DecimalMax;
@@ -24,7 +21,7 @@ public class ProductDto {
     private String productTitle;
     @NotBlank(message = "Brand Name Should not be blank")
     @Size(min = 1, max = 25, message = "Brand Title should contains at least 1 letter and max 25 letters")
-    private String Brand;
+    private String brand;
     @NotBlank(message = "Manufactured name should not be null !!")
     @Size(min = 1, max = 25, message = "Manufacturer company name should contains at least one letters !!")
     private String manufacturedBy;
@@ -41,11 +38,9 @@ public class ProductDto {
     private Long price;
     private Integer discountedPrice;
     @NotBlank(message = "Quantity should not null !!")
-    private Integer Quantity;
+    private Integer quantity;
     private boolean live;
     private boolean stock;
-
-    @ImageNameValid
     private String productImage;
 
 

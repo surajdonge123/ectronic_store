@@ -9,23 +9,38 @@ import com.bikkadit.ectronic_store.helper.PageableResponse;
 import com.bikkadit.ectronic_store.repository.ProductRepository;
 import com.bikkadit.ectronic_store.service.ProductService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
 public class ProductImplementation implements ProductService {
 
+    private Logger logger= LoggerFactory.getLogger(ProductImplementation.class);
+
+
     @Autowired
     private ProductRepository productRepository;
+
+
     @Autowired
     private ModelMapper modelMapper;
+
+    @Value("${product.profile.image.path}")
+    private String imageUploadPath;
 
     @Override
     public ProductDto createProduct(ProductDto productDto) {
@@ -52,6 +67,7 @@ public class ProductImplementation implements ProductService {
         product.setPrice(productDto.getPrice());
         product.setLive(productDto.isLive());
         product.setQuantity(productDto.getQuantity());
+        product.setProductImage(productDto.getProductImage());
         Product savedProduct = productRepository.save(product);
         ProductDto dto = modelMapper.map(savedProduct, ProductDto.class);
         return dto;
@@ -63,8 +79,18 @@ public class ProductImplementation implements ProductService {
         Product product = productRepository.findById(proId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.PRODUCT_NOT_FOUND));
         productRepository.delete(product);
 
-    }
+        String fullPath = imageUploadPath + product.getProductImage();
 
+        try {
+            Path path = Paths.get(fullPath);
+            Files.delete(path);
+        } catch (NoSuchFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
 
     @Override
@@ -73,11 +99,12 @@ public class ProductImplementation implements ProductService {
         ProductDto dto = modelMapper.map(product, ProductDto.class);
         return dto;
     }
+
     @Override
     public PageableResponse<ProductDto> getAllProduct(int pageNumber, int pageSize, String sortBy, String sortDir) {
 
-        Sort sort=(sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending());
-        Pageable pageable= PageRequest.of(pageNumber,pageSize,sort);
+        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Product> allProducts = this.productRepository.findAll(pageable);
         PageableResponse<ProductDto> pageableResponse = Helper.getPageableResponse(allProducts, ProductDto.class);
         return pageableResponse;
@@ -85,18 +112,18 @@ public class ProductImplementation implements ProductService {
 
 
     @Override
-    public PageableResponse<ProductDto> getByTitle(String subTitle, int pageNumber, int pageSize, String sortBy, String sortDir) {
-        Sort sort=(sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending());
+    public PageableResponse<ProductDto> getByProductTitle(String subTitle, int pageNumber, int pageSize, String sortBy, String sortDir) {
+        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-        Page<Product> titleContaining = this.productRepository.findByTitleContaining(subTitle, pageable);
+        Page<Product> titleContaining = this.productRepository.findByProductTitleContaining(subTitle, pageable);
         PageableResponse<ProductDto> pageableResponse = Helper.getPageableResponse(titleContaining, ProductDto.class);
         return pageableResponse;
     }
 
     @Override
     public PageableResponse<ProductDto> getByLive(int pageNumber, int pageSize, String sortBy, String sortDir) {
-        Sort sort=(sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending());
-        Pageable pageable= PageRequest.of(pageNumber,pageSize,sort);
+        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Product> byLiveTrue = this.productRepository.findByLiveTrue(pageable);
         PageableResponse<ProductDto> pageableResponse = Helper.getPageableResponse(byLiveTrue, ProductDto.class);
         return pageableResponse;

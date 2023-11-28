@@ -20,7 +20,7 @@ public class Product {
     @Id
     private String productId;
     private String productTitle;
-    private String Brand;
+    private String brand;
     private String manufacturedBy;
     private String manufacturedIn;
     @Column(length = 10000)
@@ -28,7 +28,7 @@ public class Product {
     private Date addedDate;
     private Long price;
     private Integer discountedPrice;
-    private Integer Quantity;
+    private Integer quantity;
     private boolean live;
     private boolean stock;
     private String productImage;

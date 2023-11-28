@@ -17,7 +17,7 @@ public interface ProductService {
 
     ProductDto  getSingleProduct(String proId);
 
-    PageableResponse<ProductDto> getByTitle(String subTitle,int pageNumber,int pageSize,String sortBy,String sortDir);
+    PageableResponse<ProductDto> getByProductTitle(String subTitle,int pageNumber,int pageSize,String sortBy,String sortDir);
 
     PageableResponse<ProductDto> getByLive(int pageNumber,int pageSize,String sortBy,String sortDir);
 
